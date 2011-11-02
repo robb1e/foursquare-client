@@ -2,7 +2,7 @@ organization := "com.github.robb1e"
 
 name := "foursquare-client"
 
-version := "0.1-snapshot"
+version := "0.1-SNAPSHOT"
 
 scalaVersion := "2.9.1"
 
