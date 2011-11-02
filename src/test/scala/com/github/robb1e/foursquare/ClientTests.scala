@@ -1,4 +1,4 @@
-package com.weavemadethis.foursquare
+package com.github.robb1e.foursquare
 
 import org.scalatest.matchers.ShouldMatchers
 import org.scalatest.{GivenWhenThen, FeatureSpec}
@@ -11,6 +11,7 @@ class ClientTests extends FeatureSpec with ShouldMatchers with GivenWhenThen {
       val http: Http = ThreadSafeHttp
       val clientId: String = ""
       val clientSecret: String  = ""
+      val categoryId: Option[String] = Some("4d4b7105d754a06376d81259")
   }
 
   feature("Searching Foursquare"){
