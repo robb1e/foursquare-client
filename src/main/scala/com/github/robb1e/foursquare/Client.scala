@@ -1,4 +1,4 @@
-package com.weavemadethis.foursquare
+package com.github.robb1e.foursquare
 
 import dispatch.{url, thread, Http}
 import net.liftweb.json.JsonParser._
