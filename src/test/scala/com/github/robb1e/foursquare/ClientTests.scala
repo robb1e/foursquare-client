@@ -28,6 +28,13 @@ class ClientTests extends FeatureSpec with ShouldMatchers with GivenWhenThen {
       assert(venues.size > 0, "We didn't get any venues")
     }
 
+    scenario("with lat and long and query"){
+      when("We search for a venue")
+      val venues = Venues("40.7","-74", "George")
+      then("We should get some results")
+      assert(venues.size > 0, "We didn't get any venues")
+    }
+
   }
 
 }
