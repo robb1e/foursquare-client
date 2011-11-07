@@ -5,14 +5,27 @@ import net.liftweb.json.JsonParser._
 import net.liftweb.json.DefaultFormats
 
 case class Venues(venues: List[Venue])
-case class Venue(id: String, name: String, location: Location)
-case class Location(address: Option[String], lat: String, lng: String, postalCode: Option[String], distance: String)
+case class Venue(id: String, name: String, location: Location, contact: Contact)
+case class Location(address: Option[String], lat: String, lng: String, postalCode: Option[String], distance: Option[String])
+case class Contact(phone: Option[String], formattedPhone: Option[String])
 
 trait FoursquareApiConfig {
     val http: Http
     val clientId: String
     val clientSecret: String
     val categoryId: Option[String]
+}
+
+object Venue {
+    implicit val formats = DefaultFormats
+    private val venueUri = "https://api.foursquare.com/v2/venues/%s"
+    def apply(id: String)(implicit config: FoursquareApiConfig) = {        
+        val params = Map("client_id" -> config.clientId, "client_secret" -> config.clientSecret, "v" -> "20111107")
+        val request = url(venueUri format id) <<? params
+        val response = config.http(request as_str)
+        val json = (parse(response) \ "response" \ "venue")
+        json.extract[Venue]
+    }
 }
 
 object Venues {

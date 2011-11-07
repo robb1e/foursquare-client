@@ -36,5 +36,12 @@ class ClientTests extends FeatureSpec with ShouldMatchers with GivenWhenThen {
     }
 
   }
+  
+  feature("Venue") {
+    scenario("retrieve a venue"){
+      val venue = Venue("4ac518bef964a520faa220e3")
+      venue.name should be("The Anchor")
+    }
+  }
 
 }
