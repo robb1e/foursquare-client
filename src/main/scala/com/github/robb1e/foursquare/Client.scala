@@ -5,9 +5,19 @@ import net.liftweb.json.JsonParser._
 import net.liftweb.json.DefaultFormats
 
 case class Venues(venues: List[Venue])
-case class Venue(id: String, name: String, location: Location, contact: Contact)
+case class Venue(id: String, name: String, location: Location, contact: Contact, categories: List[Category], verified: Boolean, tips: Option[Tips]){
+    lazy val primaryCategory = categories filter { c: Category => c.primary == Some(true)} head
+}
 case class Location(address: Option[String], lat: String, lng: String, postalCode: Option[String], distance: Option[String])
 case class Contact(phone: Option[String], formattedPhone: Option[String])
+case class Category(id: String, name: String, pluralName: String, shortName: String, icon: Icon, primary: Option[Boolean]){
+    lazy val image = "%s%s%s".format(icon.prefix, icon.sizes.last, icon.name)
+}
+case class Icon(prefix: String, sizes: List[Int], name: String)
+case class Tips(count: Int, groups: List[TipGroup])
+case class TipGroup(name: String, count: Int, items: List[Tip])
+case class Tip(id: String, createdAt: Long, text: String, user: User)
+case class User(id: String, firstName: String, lastName: Option[String], photo: String)
 
 trait FoursquareApiConfig {
     val http: Http

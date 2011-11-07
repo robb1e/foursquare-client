@@ -9,8 +9,8 @@ class ClientTests extends FeatureSpec with ShouldMatchers with GivenWhenThen {
   implicit val config = new FoursquareApiConfig(){
       object ThreadSafeHttp extends Http with thread.Safety
       val http: Http = ThreadSafeHttp
-      val clientId: String = ""
-      val clientSecret: String  = ""
+      val clientId: String = "TFCH1VL5TB425OGQWLUSWT54P4ZN3YEPU015J1QU4NUTPSL5"
+      val clientSecret: String  = "DZGRH25I1FBB13KRTRUZUH24GK3UAH3WLEOKDUJTZQZR0WB4"
       val categoryId: Option[String] = Some("4d4b7105d754a06376d81259")
   }
 
@@ -41,6 +41,11 @@ class ClientTests extends FeatureSpec with ShouldMatchers with GivenWhenThen {
     scenario("retrieve a venue"){
       val venue = Venue("4ac518bef964a520faa220e3")
       venue.name should be("The Anchor")
+      venue.categories.size should be(3)
+      venue.primaryCategory.name should be("Pub")
+      venue.primaryCategory.image should be("https://foursquare.com/img/categories/nightlife/pub_256.png")
+      venue.tips should not be(None)
+      venue.tips.get.count should be (30)
     }
   }
 
