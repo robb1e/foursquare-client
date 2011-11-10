@@ -45,20 +45,21 @@ object Venues {
   private val searchUri = "https://api.foursquare.com/v2/venues/search"
   private val uri = "https://api.foursquare.com/v2/venues/search?limit=20&client_id=%s&intent=checkin&client_secret=%s%s&v=20111101&ll=%s,%s"
 
-  def apply(lat: String, long: String, query: String)(implicit config: FoursquareApiConfig): List[Venue] = {
-    searchRequest(Map("ll" -> "%s,%s".format(lat, long), "query" -> query))      
+  def apply(lat: String, long: String, query: Option[String] = None, limit: Int = 20)(implicit config: FoursquareApiConfig): List[Venue] = {
+    val params = Map("ll" -> "%s,%s".format(lat, long), "limit" -> limit.toString)
+    query match {
+        case Some(query) => searchRequest(params ++ Map("query" -> query))      
+        case _ => searchRequest(params)
+    }
   }
 
-  def apply(lat: String, long: String)(implicit config: FoursquareApiConfig): List[Venue] = {
-    searchRequest(Map("ll" -> "%s,%s".format(lat, long)))
-  }
   
   private def searchRequest(params: Map[String, String])(implicit config: FoursquareApiConfig) = {
       val categoryParam: Map[String, String] = config.categoryId match {
           case Some(id) => Map("categoryId" -> id)
           case _ => Map()
       }
-      val initParams = Map("limit" -> "20", "client_id" -> config.clientId, "intent" -> "checkin", "client_secret" -> config.clientSecret, "v" -> "20111101")
+      val initParams = Map("client_id" -> config.clientId, "intent" -> "checkin", "client_secret" -> config.clientSecret, "v" -> "20111101")
       val finalParams = initParams ++ params ++ categoryParam
       val request = url(searchUri) <<? finalParams
       val response = config.http(request as_str)
